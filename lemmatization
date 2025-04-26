@@ -1,0 +1,51 @@
+# Importing required libraries
+import re
+import nltk
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+
+# Download necessary NLTK data (only need to run once)
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+
+# Step 1: Read the text file
+file_path = 'input_text.txt'  # Replace with your file name
+with open(file_path, 'r') as file:
+    text = file.read()
+
+# Step 2: Text Cleaning (Remove punctuation, numbers, special characters, and extra whitespaces)
+cleaned_text = re.sub(r'[^a-zA-Z\s]', '', text)  # Keep only letters and spaces
+cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()  # Remove extra spaces
+
+print("\nCleaned Text:\n", cleaned_text)
+
+# Step 3: Convert text to lowercase
+lower_text = cleaned_text.lower()
+
+print("\nLowercase Text:\n", lower_text)
+
+# Step 4: Tokenization
+tokens = word_tokenize(lower_text)
+
+# Step 5: Stemming
+stemmer = PorterStemmer()
+stemmed_tokens = [stemmer.stem(word) for word in tokens]
+
+print("\nStemmed Words:\n", stemmed_tokens)
+
+# Step 6: Lemmatization
+lemmatizer = WordNetLemmatizer()
+lemmatized_tokens = [lemmatizer.lemmatize(word) for word in tokens]
+
+print("\nLemmatized Words:\n", lemmatized_tokens)
+
+# Step 7: Create a list of 3 consecutive words after lemmatization
+triplets = []
+for i in range(len(lemmatized_tokens) - 2):
+    triplet = (lemmatized_tokens[i], lemmatized_tokens[i+1], lemmatized_tokens[i+2])
+    triplets.append(triplet)
+
+print("\nList of 3 Consecutive Words (Triplets):")
+for t in triplets:
+    print(t)
