@@ -1,0 +1,56 @@
+# Import necessary library
+from sklearn.feature_extraction.text import CountVectorizer
+
+# Sample Technical Texts (directly inside code)
+technical1 = """Machine learning is a branch of artificial intelligence.
+It focuses on the use of data and algorithms to imitate the way humans learn.
+Over time, machine learning improves its accuracy through experience.
+Supervised learning and unsupervised learning are its main types.
+Machine learning has applications in healthcare, finance, and marketing."""
+
+technical2 = """Deep learning is a subset of machine learning.
+It uses artificial neural networks with many layers.
+Deep learning models can perform tasks like image and speech recognition.
+They require large datasets and significant computing power.
+Training deep networks often involves backpropagation and gradient descent."""
+
+technical3 = """Natural Language Processing (NLP) allows machines to understand human language.
+NLP involves tasks like translation, sentiment analysis, and summarization.
+Techniques like tokenization, stemming, and lemmatization are essential.
+Recent advances in NLP are powered by transformer models.
+GPT and BERT are popular models in natural language processing."""
+
+# Combine all texts into a list
+technical_texts = [technical1, technical2, technical3]
+
+# One-Hot Encoding
+vectorizer = CountVectorizer(binary=True)
+X = vectorizer.fit_transform(technical_texts)
+
+print("One-Hot Encoded Matrix:")
+print(X.toarray())
+print("\nFeature Names:", vectorizer.get_feature_names_out())
+--------------------------------------------------------------------------------------------------------------------------------
+
+
+# Import necessary library
+from sklearn.feature_extraction.text import CountVectorizer
+
+# Read the text files (assumed that the files are named 'technical1.txt', 'technical2.txt', 'technical3.txt')
+# Replace these filenames with the actual filenames of the text files provided by your examiner
+
+file_paths = ['technical1.txt', 'technical2.txt', 'technical3.txt']
+
+# Read the content of each file and store them in a list
+technical_texts = []
+for path in file_paths:
+    with open(path, 'r') as file:
+        technical_texts.append(file.read())
+
+# One-Hot Encoding using CountVectorizer
+vectorizer = CountVectorizer(binary=True)
+X = vectorizer.fit_transform(technical_texts)
+
+print("One-Hot Encoded Matrix:")
+print(X.toarray())
+print("\nFeature Names:", vectorizer.get_feature_names_out())
