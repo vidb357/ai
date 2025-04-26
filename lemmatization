@@ -133,3 +133,69 @@ print("\nList of 3 Consecutive Words (Triplets):")
 for t in triplets:
     print(t)
 
+---------------------------------------------------FILE----------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------
+
+# Import libraries
+import re
+
+# Step 1: Read the text file
+# Examiner will give a file called, say, 'input_text.txt'
+file_name = 'input_text.txt'
+
+with open(file_name, 'r') as file:
+    text = file.read()
+
+# Step 2: Text cleaning (remove punctuation, numbers, special characters, extra whitespaces)
+cleaned_text = re.sub(r'[^a-zA-Z\s]', '', text)  # Keep only letters and spaces
+cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()  # Remove extra spaces
+
+print("\nCleaned Text:\n", cleaned_text)
+
+# Step 3: Convert text to lowercase
+lower_text = cleaned_text.lower()
+
+print("\nLowercase Text:\n", lower_text)
+
+# Step 4: Tokenization (simple split)
+tokens = lower_text.split()
+
+print("\nTokens:\n", tokens)
+
+# Step 5: Light Stemming (just removing common suffixes manually)
+def light_stem(word):
+    suffixes = ['ing', 'ed', 'ly', 'es', 's']
+    for suffix in suffixes:
+        if word.endswith(suffix) and len(word) > len(suffix) + 2:
+            return word[:-len(suffix)]
+    return word
+
+stemmed_tokens = [light_stem(word) for word in tokens]
+
+print("\nStemmed Words:\n", stemmed_tokens)
+
+# Step 6: Light Lemmatization (simulate)
+def light_lemmatize(word):
+    if word.endswith('ies'):
+        return word[:-3] + 'y'
+    elif word.endswith('s') and not word.endswith('ss'):
+        return word[:-1]
+    else:
+        return word
+
+lemmatized_tokens = [light_lemmatize(word) for word in stemmed_tokens]
+
+print("\nLemmatized Words:\n", lemmatized_tokens)
+
+# Step 7: Create list of 3 consecutive words
+triplets = []
+for i in range(len(lemmatized_tokens) - 2):
+    triplet = (lemmatized_tokens[i], lemmatized_tokens[i+1], lemmatized_tokens[i+2])
+    triplets.append(triplet)
+
+print("\nList of 3 Consecutive Words (Triplets):")
+for t in triplets:
+    print(t)
+
+
