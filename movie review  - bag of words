@@ -1,0 +1,30 @@
+# Import the necessary library
+from sklearn.feature_extraction.text import CountVectorizer
+
+# Sample Movie Review Texts
+movie1 = """The movie was an absolute masterpiece.
+The storytelling was gripping and the acting was phenomenal.
+I loved every moment of the film and would highly recommend it."""
+
+movie2 = """While the movie had stunning visuals, the plot was weak.
+The characters lacked depth and the pacing felt rushed.
+Overall, it was a disappointing experience despite the hype."""
+
+movie3 = """An emotional rollercoaster with brilliant performances.
+The direction and music score added to the magic.
+This movie is a must-watch for drama lovers."""
+
+# Combine all reviews into a list
+movie_reviews = [movie1, movie2, movie3]
+
+# Bag of Words
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(movie_reviews)
+
+print("Bag of Words Matrix:")
+print(X.toarray())
+print("\nFeature Names:", vectorizer.get_feature_names_out())
+
+
+________________________________________________________________
+
