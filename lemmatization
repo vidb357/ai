@@ -49,3 +49,87 @@ for i in range(len(lemmatized_tokens) - 2):
 print("\nList of 3 Consecutive Words (Triplets):")
 for t in triplets:
     print(t)
+
+----------------------------------------------------------------------------------------------------
+
+
+
+
+# Import libraries
+import re
+
+# Step 1: Text inside code
+text = """
+Artificial Intelligence is transforming industries. Machine learning algorithms are now everywhere. 
+From self-driving cars to virtual assistants, AI is embedded in our daily lives. Companies use AI for 
+customer support, fraud detection, and product recommendations. Natural Language Processing allows 
+machines to understand human languages. Deep learning, a subset of machine learning, powers image 
+recognition and speech recognition. Data scientists build predictive models using large datasets. Neural 
+networks mimic the way human brains process information. Cloud computing platforms provide 
+infrastructure for training AI models. Ethics in AI is an important research area. Bias in machine learning 
+models must be addressed. Explainable AI helps us understand model decisions. Computer vision 
+systems can identify objects in photos and videos. Robotics combines AI with mechanical engineering. 
+AI-driven chatbots offer 24/7 customer service. Recommendation systems suggest movies, books, and 
+products. Cybersecurity uses AI to detect threats and vulnerabilities. In healthcare, AI helps diagnose 
+diseases. Financial institutions apply AI in credit scoring and fraud analytics. Personalization engines 
+enhance user experiences on e-commerce sites. Smart assistants like Alexa and Siri depend on AI. 
+Predictive maintenance minimizes downtime in manufacturing. Supply chain optimization uses AI 
+forecasts. Education platforms adapt content based on student performance. Gaming industries create 
+realistic NPCs using AI. Autonomous drones rely on AI for navigation. Sentiment analysis tools gauge 
+public opinion. Speech synthesis technologies allow machines to "speak" naturally. Facial recognition 
+systems authenticate users securely. Translation apps break language barriers. Energy management 
+systems save power using AI optimizations.
+"""
+
+# Step 2: Text cleaning (remove punctuation, numbers, special characters, extra whitespaces)
+cleaned_text = re.sub(r'[^a-zA-Z\s]', '', text)  # Keep only letters and spaces
+cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()  # Remove extra spaces
+
+print("\nCleaned Text:\n", cleaned_text)
+
+# Step 3: Convert text to lowercase
+lower_text = cleaned_text.lower()
+
+print("\nLowercase Text:\n", lower_text)
+
+# Step 4: Tokenization (simple split)
+tokens = lower_text.split()
+
+print("\nTokens:\n", tokens)
+
+# Step 5: Light Stemming (just removing common suffixes manually)
+def light_stem(word):
+    suffixes = ['ing', 'ed', 'ly', 'es', 's']
+    for suffix in suffixes:
+        if word.endswith(suffix) and len(word) > len(suffix) + 2:
+            return word[:-len(suffix)]
+    return word
+
+stemmed_tokens = [light_stem(word) for word in tokens]
+
+print("\nStemmed Words:\n", stemmed_tokens)
+
+# Step 6: Light Lemmatization (no real lemmatization because no WordNet, but simulate)
+# Here, we just pretend to correct some plurals manually
+def light_lemmatize(word):
+    if word.endswith('ies'):
+        return word[:-3] + 'y'
+    elif word.endswith('s') and not word.endswith('ss'):
+        return word[:-1]
+    else:
+        return word
+
+lemmatized_tokens = [light_lemmatize(word) for word in stemmed_tokens]
+
+print("\nLemmatized Words:\n", lemmatized_tokens)
+
+# Step 7: Create list of 3 consecutive words
+triplets = []
+for i in range(len(lemmatized_tokens) - 2):
+    triplet = (lemmatized_tokens[i], lemmatized_tokens[i+1], lemmatized_tokens[i+2])
+    triplets.append(triplet)
+
+print("\nList of 3 Consecutive Words (Triplets):")
+for t in triplets:
+    print(t)
+
