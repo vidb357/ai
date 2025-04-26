@@ -1,0 +1,57 @@
+import numpy as np
+
+# Step 1: Define network architecture
+N = 4  # Number of binary inputs, you can change it
+hidden_layer1_size = 5
+hidden_layer2_size = 3
+output_layer_size = 1
+steps = 10  # Number of steps (iterations)
+
+# Step 2: Generate random binary input data
+X = np.random.randint(0, 2, (10, N))  # 10 samples, N inputs
+
+# Step 3: Randomly initialize weights and biases
+W1 = np.random.randn(N, hidden_layer1_size)
+b1 = np.random.randn(hidden_layer1_size)
+
+W2 = np.random.randn(hidden_layer1_size, hidden_layer2_size)
+b2 = np.random.randn(hidden_layer2_size)
+
+W3 = np.random.randn(hidden_layer2_size, output_layer_size)
+b3 = np.random.randn(output_layer_size)
+
+# Step 4: Activation function
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+# Step 5: Training steps (forward pass only, just updating randomly for demo)
+for step in range(steps):
+    # Forward pass
+    z1 = np.dot(X, W1) + b1
+    a1 = sigmoid(z1)
+    
+    z2 = np.dot(a1, W2) + b2
+    a2 = sigmoid(z2)
+    
+    z3 = np.dot(a2, W3) + b3
+    output = sigmoid(z3)
+    
+    # Update weights and biases randomly (since actual training is not required)
+    W1 += np.random.randn(*W1.shape) * 0.01
+    b1 += np.random.randn(*b1.shape) * 0.01
+    W2 += np.random.randn(*W2.shape) * 0.01
+    b2 += np.random.randn(*b2.shape) * 0.01
+    W3 += np.random.randn(*W3.shape) * 0.01
+    b3 += np.random.randn(*b3.shape) * 0.01
+
+# Step 6: Display final weights, biases, and number of steps
+print("Final Weight Matrix W1 (Input -> Hidden Layer 1):\n", W1)
+print("\nFinal Bias b1 (Hidden Layer 1):\n", b1)
+
+print("\nFinal Weight Matrix W2 (Hidden Layer 1 -> Hidden Layer 2):\n", W2)
+print("\nFinal Bias b2 (Hidden Layer 2):\n", b2)
+
+print("\nFinal Weight Matrix W3 (Hidden Layer 2 -> Output Layer):\n", W3)
+print("\nFinal Bias b3 (Output Layer):\n", b3)
+
+print("\nTotal Steps:", steps)
