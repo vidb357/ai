@@ -1,0 +1,54 @@
+# Import libraries
+import re
+
+# Step 1: Read the text file
+file_name = 'input_text.txt'  # Examiner will provide this file
+
+with open(file_name, 'r') as file:
+    text = file.read()
+
+print("Original Text:\n", text)
+
+# Step 2: Text cleaning (remove punctuation, numbers, special characters, extra whitespaces)
+cleaned_text = re.sub(r'[^a-zA-Z\s]', '', text)  # Only keep letters and spaces
+cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()  # Remove extra spaces
+
+print("\nCleaned Text:\n", cleaned_text)
+
+# Step 3: Convert text to lowercase
+lower_text = cleaned_text.lower()
+
+print("\nLowercase Text:\n", lower_text)
+
+# Step 4: Tokenization
+tokens = lower_text.split()
+
+print("\nTokens:\n", tokens)
+
+# Step 5: Remove Stopwords
+# Since JupyterLite has no nltk, we define a small stopwords list manually
+stopwords = set([
+    'the', 'is', 'in', 'at', 'which', 'on', 'for', 'a', 'an', 'and', 'to', 'of', 
+    'with', 'as', 'by', 'that', 'this', 'it', 'from', 'or', 'be', 'are', 'was', 'were', 
+    'but', 'not', 'has', 'have', 'had'
+])
+
+filtered_tokens = [word for word in tokens if word not in stopwords]
+
+print("\nTokens after Stopword Removal:\n", filtered_tokens)
+
+# Step 6: Correct Misspelled Words (Simple correction using a custom dictionary)
+# Since JupyterLite has no symspell/spellchecker, let's use basic fixes manually
+corrections = {
+    'technolgy': 'technology',
+    'enviroment': 'environment',
+    'developmnt': 'development',
+    'managment': 'management',
+    'computr': 'computer',
+    'progamming': 'programming'
+    # Add more common errors here if needed
+}
+
+corrected_tokens = [corrections[word] if word in corrections else word for word in filtered_tokens]
+
+print("\nTokens after Spelling Correction:\n", corrected_tokens)
