@@ -1,0 +1,91 @@
+import numpy as np
+
+# Step 1: Define Tanh activation and its derivative
+def tanh(x):
+    return np.tanh(x)
+
+def tanh_derivative(x):
+    return 1.0 - np.tanh(x) ** 2
+
+# Step 2: Create input and output data
+# Let's assume N = 4 binary inputs
+X = np.array([
+    [0, 0, 0, 0],
+    [0, 0, 1, 1],
+    [0, 1, 0, 1],
+    [1, 0, 0, 1],
+    [1, 1, 1, 0]
+])
+
+# Output (for simplicity, binary output)
+y = np.array([[0], [1], [1], [1], [0]])
+
+# Step 3: Initialize network parameters
+input_size = 4
+hidden_size1 = 5
+hidden_size2 = 4
+output_size = 1
+
+np.random.seed(3)  # For reproducibility
+W1 = np.random.randn(input_size, hidden_size1)
+b1 = np.random.randn(hidden_size1)
+
+W2 = np.random.randn(hidden_size1, hidden_size2)
+b2 = np.random.randn(hidden_size2)
+
+W3 = np.random.randn(hidden_size2, output_size)
+b3 = np.random.randn(output_size)
+
+# Step 4: Training with backpropagation
+epochs = 10000
+learning_rate = 0.01
+
+for epoch in range(epochs):
+    # Forward pass
+    z1 = np.dot(X, W1) + b1
+    a1 = tanh(z1)
+
+    z2 = np.dot(a1, W2) + b2
+    a2 = tanh(z2)
+
+    z3 = np.dot(a2, W3) + b3
+    output = tanh(z3)
+
+    # Calculate loss (optional for monitoring)
+    loss = np.mean((y - output) ** 2)
+
+    # Backward pass
+    error = y - output
+    d_output = error * tanh_derivative(z3)
+
+    error_hidden2 = d_output.dot(W3.T)
+    d_hidden2 = error_hidden2 * tanh_derivative(z2)
+
+    error_hidden1 = d_hidden2.dot(W2.T)
+    d_hidden1 = error_hidden1 * tanh_derivative(z1)
+
+    # Update weights and biases
+    W3 += a2.T.dot(d_output) * learning_rate
+    b3 += np.sum(d_output, axis=0) * learning_rate
+
+    W2 += a1.T.dot(d_hidden2) * learning_rate
+    b2 += np.sum(d_hidden2, axis=0) * learning_rate
+
+    W1 += X.T.dot(d_hidden1) * learning_rate
+    b1 += np.sum(d_hidden1, axis=0) * learning_rate
+
+    # Optional: print loss every 2000 epochs
+    if epoch % 2000 == 0:
+        print(f"Epoch {epoch}, Loss: {loss}")
+
+# Step 5: Final Output
+print("\nFinal Output after Training:")
+print(output)
+
+print("\nFinal Weights and Biases:")
+print("\nW1:\n", W1)
+print("\nb1:\n", b1)
+print("\nW2:\n", W2)
+print("\nb2:\n", b2)
+print("\nW3:\n", W3)
+print("\nb3:\n", b3)
