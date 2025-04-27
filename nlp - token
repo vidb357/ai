@@ -52,3 +52,76 @@ corrections = {
 corrected_tokens = [corrections[word] if word in corrections else word for word in filtered_tokens]
 
 print("\nTokens after Spelling Correction:\n", corrected_tokens)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------NLTK-----------------------------------------------
+
+# Import libraries
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.corpus import words
+
+# Make sure you have downloaded these once:
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('words')
+
+# Step 1: Read the text file
+file_name = 'input_text.txt'  # Examiner will provide this file
+
+with open(file_name, 'r') as file:
+    text = file.read()
+
+print("Original Text:\n", text)
+
+# Step 2: Text cleaning (remove punctuation, numbers, special characters, extra whitespaces)
+cleaned_text = re.sub(r'[^a-zA-Z\s]', '', text)  # Keep only letters and spaces
+cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()  # Remove extra spaces
+
+print("\nCleaned Text:\n", cleaned_text)
+
+# Step 3: Convert text to lowercase
+lower_text = cleaned_text.lower()
+
+print("\nLowercase Text:\n", lower_text)
+
+# Step 4: Tokenization using NLTK
+tokens = word_tokenize(lower_text)
+
+print("\nTokens:\n", tokens)
+
+# Step 5: Remove Stopwords using NLTK
+nltk_stopwords = set(stopwords.words('english'))
+filtered_tokens = [word for word in tokens if word not in nltk_stopwords]
+
+print("\nTokens after Stopword Removal:\n", filtered_tokens)
+
+# Step 6: Simple Spelling Correction (using NLTK word list)
+# If a word is not in nltk's word list, we assume it's misspelled
+english_words = set(words.words())
+
+corrected_tokens = []
+for word in filtered_tokens:
+    if word in english_words:
+        corrected_tokens.append(word)
+    else:
+        # If not found, keep original (for better spell correction, use TextBlob or SymSpell)
+        corrected_tokens.append(word)
+
+print("\nTokens after Basic Spelling Check:\n", corrected_tokens)
+
