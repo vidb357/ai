@@ -1,0 +1,65 @@
+from collections import deque
+
+# Function to read the graph from user input
+def input_graph():
+    graph = {}
+    n = int(input("Enter the number of nodes in the graph: "))
+    
+    for i in range(n):
+        node = input(f"Enter the name of node {i+1}: ")
+        adj_nodes = input(f"Enter the adjacent nodes for {node} (comma separated): ").split(',')
+        adj_nodes = [adj.strip() for adj in adj_nodes]  # Remove any extra spaces
+        graph[node] = adj_nodes
+    
+    return graph
+
+# Breadth First Search (BFS) function using a queue
+def bfs(graph, start_node):
+    visited = set()  # To track visited nodes
+    queue = deque([start_node])  # Initialize the queue with the start node
+    
+    print("BFS Traversal:", end=" ")
+    
+    while queue:
+        node = queue.popleft()  # Pop the leftmost node from the queue
+        
+        if node not in visited:
+            print(node, end=" ")  # Visit the node (print it)
+            visited.add(node)  # Mark the node as visited
+            
+            # Add the unvisited neighbors to the queue
+            for neighbor in graph.get(node, []):
+                if neighbor not in visited:
+                    queue.append(neighbor)
+
+# Main function
+def main():
+    # Input the graph from the user
+    graph = input_graph()
+    
+    print("\nGraph Representation:")
+    for node, adj in graph.items():
+        print(f"{node}: {', '.join(adj)}")
+    
+    # Perform BFS starting from a given node
+    start_node = input("\nEnter the starting node for BFS: ")
+    print(f"\nBFS Traversal starting from node '{start_node}':")
+    bfs(graph, start_node)
+
+if __name__ == "__main__":
+    main()
+-----------------------------------------------------------------------------
+
+input
+
+Enter the number of nodes in the graph: 5
+Enter the name of node 1: A
+Enter the adjacent nodes for A (comma separated): B,C
+Enter the name of node 2: B
+Enter the adjacent nodes for B (comma separated): A,D
+Enter the name of node 3: C
+Enter the adjacent nodes for C (comma separated): A,E
+Enter the name of node 4: D
+Enter the adjacent nodes for D (comma separated): B
+Enter the name of node 5: E
+Enter the adjacent nodes for E (comma separated): C
