@@ -1,0 +1,130 @@
+import random
+
+# Initialize the Tic-Tac-Toe board
+def initialize_board():
+    return [[' ' for _ in range(3)] for _ in range(3)]
+
+# Print the board
+def print_board(board):
+    print("\nBoard:")
+    for row in board:
+        print('|'.join(row))
+    print()
+
+# Check if a player has won
+def check_win(board, player):
+    # Check rows, columns, and diagonals for a win
+    for i in range(3):
+        if all([cell == player for cell in board[i]]):  # Check row
+            return True
+        if all([board[j][i] == player for j in range(3)]):  # Check column
+            return True
+    if all([board[i][i] == player for i in range(3)]):  # Check main diagonal
+        return True
+    if all([board[i][2 - i] == player for i in range(3)]):  # Check anti-diagonal
+        return True
+    return False
+
+# Check if the board is full (i.e., a draw)
+def is_full(board):
+    return all(board[i][j] != ' ' for i in range(3) for j in range(3))
+
+# Min-Max Algorithm to find the worst move for the computer (suboptimal)
+def min_max(board, depth, is_maximizing):
+    # Base cases: check for win or draw
+    if check_win(board, 'X'):  # Computer wins
+        return -10 + depth
+    if check_win(board, 'O'):  # Human wins
+        return 10 - depth
+    if is_full(board):  # Draw
+        return 0
+
+    if is_maximizing:
+        min_eval = float('inf')
+        # Explore all possible moves for 'X' (computer)
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == ' ':
+                    board[i][j] = 'X'
+                    eval = min_max(board, depth + 1, False)
+                    board[i][j] = ' '
+                    min_eval = min(min_eval, eval)
+        return min_eval
+    else:
+        max_eval = float('-inf')
+        # Explore all possible moves for 'O' (human)
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == ' ':
+                    board[i][j] = 'O'
+                    eval = min_max(board, depth + 1, True)
+                    board[i][j] = ' '
+                    max_eval = max(max_eval, eval)
+        return max_eval
+
+# Find the worst move for the computer to lose or draw
+def worst_move(board):
+    worst_val = float('inf')
+    move = (-1, -1)
+
+    # Try all possible moves and evaluate using Min-Max to ensure worst outcome
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == ' ':
+                board[i][j] = 'X'
+                move_val = min_max(board, 0, False)
+                board[i][j] = ' '
+                if move_val < worst_val:
+                    worst_val = move_val
+                    move = (i, j)
+
+    return move
+
+# Get user's move
+def get_user_move(board):
+    while True:
+        try:
+            row, col = map(int, input("Enter your move (row and column) separated by space (0-based index): ").split())
+            if 0 <= row < 3 and 0 <= col < 3 and board[row][col] == ' ':
+                return row, col
+            else:
+                print("Invalid move! Try again.")
+        except ValueError:
+            print("Invalid input. Please enter two numbers (row and column) separated by space.")
+
+# Main function to play the game
+def play_game():
+    board = initialize_board()
+    print_board(board)
+
+    while True:
+        # Human's move
+        row, col = get_user_move(board)
+        board[row][col] = 'O'
+        print_board(board)
+
+        # Check if human wins
+        if check_win(board, 'O'):
+            print("You win!")
+            break
+        if is_full(board):
+            print("It's a draw!")
+            break
+
+        # Computer's worst move (to lose or draw)
+        print("Computer is making a move...")
+        row, col = worst_move(board)
+        board[row][col] = 'X'
+        print_board(board)
+
+        # Check if computer wins
+        if check_win(board, 'X'):
+            print("Computer wins!")
+            break
+        if is_full(board):
+            print("It's a draw!")
+            break
+
+# Run the game
+if __name__ == "__main__":
+    play_game()
