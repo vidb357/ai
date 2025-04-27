@@ -1,0 +1,60 @@
+# Function to input a fuzzy set
+def input_fuzzy_set(set_name):
+    n = int(input(f"\nEnter the number of elements in {set_name}: "))
+    fuzzy_set = {}
+    print(f"Enter elements for {set_name}:")
+    for i in range(1, n + 1):
+        element = input(f"Enter element {i} name: ")
+        membership = float(input(f"Enter membership value for {element}: "))
+        fuzzy_set[element] = membership
+    return fuzzy_set
+
+# Union of three fuzzy sets
+def union(A, B, C):
+    result = {}
+    for key in A.keys() | B.keys() | C.keys():
+        result[key] = max(A.get(key, 0), B.get(key, 0), C.get(key, 0))
+    return result
+
+# Intersection of three fuzzy sets
+def intersection(A, B, C):
+    result = {}
+    for key in A.keys() & B.keys() & C.keys():
+        result[key] = min(A[key], B[key], C[key])
+    return result
+
+# Complement of a fuzzy set
+def complement(A):
+    return {key: 1 - value for key, value in A.items()}
+
+# Main Program
+print("----- Input for Fuzzy Set A -----")
+fuzzy_set_A = input_fuzzy_set("Fuzzy Set A")
+
+print("\n----- Input for Fuzzy Set B -----")
+fuzzy_set_B = input_fuzzy_set("Fuzzy Set B")
+
+print("\n----- Input for Fuzzy Set C -----")
+fuzzy_set_C = input_fuzzy_set("Fuzzy Set C")
+
+print("\nFuzzy Set A:", fuzzy_set_A)
+print("Fuzzy Set B:", fuzzy_set_B)
+print("Fuzzy Set C:", fuzzy_set_C)
+
+# Union of three fuzzy sets
+union_result = union(fuzzy_set_A, fuzzy_set_B, fuzzy_set_C)
+print("\nUnion of A, B, and C:", union_result)
+
+# Intersection of three fuzzy sets
+intersection_result = intersection(fuzzy_set_A, fuzzy_set_B, fuzzy_set_C)
+print("Intersection of A, B, and C:", intersection_result)
+
+# Complement of each fuzzy set
+complement_A = complement(fuzzy_set_A)
+print("Complement of A:", complement_A)
+
+complement_B = complement(fuzzy_set_B)
+print("Complement of B:", complement_B)
+
+complement_C = complement(fuzzy_set_C)
+print("Complement of C:", complement_C)
