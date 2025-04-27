@@ -1,0 +1,60 @@
+#  1. Import necessary libraries
+import pandas as pd
+from collections import defaultdict
+
+#  2. Read the graph from CSV
+file_path = 'edges.csv'  # CSV file with two columns: node1,node2
+
+# Load CSV using pandas
+edges = pd.read_csv(file_path, header=None)
+edges.columns = ['Node1', 'Node2']
+
+print("Edges read from file:\n", edges)
+
+#  3. Build the Adjacency List
+graph = defaultdict(list)
+
+for idx, row in edges.iterrows():
+    u, v = row['Node1'], row['Node2']
+    graph[u].append(v)
+    graph[v].append(u)  # Since graph is undirected
+
+print("\nAdjacency List:")
+for node in graph:
+    print(f"{node} -> {graph[node]}")
+
+#  4. Recursive DFS Function
+def dfs(graph, current_node, visited):
+    print(current_node, end=' ')
+    visited.add(current_node)
+    
+    for neighbor in graph[current_node]:
+        if neighbor not in visited:
+            dfs(graph, neighbor, visited)
+
+#  5. Run DFS
+start_node = 'A'  # You can change start node here
+
+
+
+
+print("\nDFS Traversal starting from node", start_node, ":")
+visited = set()
+dfs(graph, start_node, visited)
+
+
+
+
+
+
+
+
+
+
+----------------------------SAMPLE CSV----------------------------------
+A,B
+A,C
+B,D
+C,E
+D,E
+E,F
