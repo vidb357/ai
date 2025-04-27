@@ -1,0 +1,104 @@
+import pandas as pd
+import heapq
+
+# 📌 1. Read Graph from CSV
+edges_file = 'edges.csv'  # Directed weighted edges
+heuristics_file = 'heuristics.csv'  # Heuristic values
+
+edges = pd.read_csv(edges_file, header=None)
+edges.columns = ['Node1', 'Node2', 'Weight']
+
+heuristics = pd.read_csv(heuristics_file, header=None)
+heuristics.columns = ['Node', 'Heuristic']
+
+# 📌 2. Build Graph (Adjacency List)
+graph = {}
+
+for idx, row in edges.iterrows():
+    if row['Node1'] not in graph:
+        graph[row['Node1']] = []
+    if row['Node2'] not in graph:
+        graph[row['Node2']] = []
+    
+    # As the graph is undirected, we add both directions
+    graph[row['Node1']].append((row['Node2'], row['Weight']))
+    graph[row['Node2']].append((row['Node1'], row['Weight']))
+
+# 📌 3. Build Heuristic Dictionary
+heuristic_values = dict(zip(heuristics['Node'], heuristics['Heuristic']))
+
+print("Graph:", graph)
+print("\nHeuristic Values:", heuristic_values)
+
+# 📌 4. A* Algorithm Implementation
+def a_star(graph, start, goal, heuristics):
+    # Priority Queue (min-heap) to store nodes along with their f(n) value
+    open_list = []
+    heapq.heappush(open_list, (0 + heuristics[start], start))  # (f(n), node)
+    
+    # Dictionary to store the g(n) value (cost from start node)
+    g_costs = {start: 0}
+    
+    # Parent dictionary to reconstruct the path
+    parents = {start: None}
+    
+    # Set to track the closed nodes (nodes already visited)
+    closed_list = set()
+    
+    while open_list:
+        # Get the node with the lowest f(n)
+        f_n, current_node = heapq.heappop(open_list)
+        
+        # If the goal is reached, reconstruct the path
+        if current_node == goal:
+            path = []
+            while current_node is not None:
+                path.append(current_node)
+                current_node = parents[current_node]
+            return path[::-1]  # Reverse the path to get it from start to goal
+        
+        closed_list.add(current_node)
+        
+        # Explore the neighbors
+        for neighbor, weight in graph.get(current_node, []):
+            if neighbor in closed_list:
+                continue
+            
+            tentative_g = g_costs[current_node] + weight
+            
+            if neighbor not in g_costs or tentative_g < g_costs[neighbor]:
+                g_costs[neighbor] = tentative_g
+                f_n = tentative_g + heuristics[neighbor]
+                heapq.heappush(open_list, (f_n, neighbor))
+                parents[neighbor] = current_node
+    
+    return None  # Return None if no path is found
+
+# 📌 5. Run A* Algorithm from 'A' to 'F'
+start_node = 'A'
+goal_node = 'F'
+
+print(f"\nFinding path from {start_node} to {goal_node} using A* Algorithm:")
+
+path = a_star(graph, start_node, goal_node, heuristic_values)
+if path:
+    print(f"Path found: {path}")
+else:
+    print("No path found")
+
+
+--------------------edges.csv------------
+A,B,4
+A,C,2
+B,C,5
+C,D,10
+D,E,3
+E,F,7
+
+---------------------h.csv--------------------
+A,7
+B,6
+C,3
+D,1
+E,0
+F,0
