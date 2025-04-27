@@ -1,0 +1,87 @@
+import heapq
+
+# Function to read the directed weighted graph and heuristic values from the user
+def input_graph_and_heuristics():
+    graph = {}
+    heuristics = {}
+    n = int(input("Enter the number of nodes in the graph: "))
+    
+    # Reading graph and heuristic values from user
+    for i in range(n):
+        node = input(f"Enter the name of node {i+1}: ")
+        adj_nodes = input(f"Enter the adjacent nodes and weights for {node} (format: node:weight, node:weight): ").split(',')
+        
+        adj_list = {}
+        for adj in adj_nodes:
+            neighbor, weight = adj.split(':')
+            adj_list[neighbor.strip()] = int(weight.strip())
+        
+        graph[node] = adj_list
+        heuristic_value = float(input(f"Enter the heuristic value for node {node}: "))
+        heuristics[node] = heuristic_value
+    
+    return graph, heuristics
+
+# Best First Search (BestFS) function using a priority queue (min-heap)
+def best_first_search(graph, heuristics, start_node):
+    visited = set()  # To track visited nodes
+    priority_queue = []  # Priority queue for BestFS (min-heap)
+    
+    # Start with the start_node; push the node and its heuristic value into the queue
+    heapq.heappush(priority_queue, (heuristics[start_node], start_node))
+    
+    print("Best First Search Traversal:", end=" ")
+    
+    while priority_queue:
+        # Pop the node with the smallest heuristic value
+        current_heuristic, node = heapq.heappop(priority_queue)
+        
+        if node not in visited:
+            print(node, end=" ")  # Visit the node (print it)
+            visited.add(node)  # Mark the node as visited
+            
+            # Add the unvisited neighbors of the current node to the priority queue
+            for neighbor in graph.get(node, {}):
+                if neighbor not in visited:
+                    heapq.heappush(priority_queue, (heuristics[neighbor], neighbor))
+
+# Main function
+def main():
+    # Input the graph and heuristic values from the user
+    graph, heuristics = input_graph_and_heuristics()
+    
+    print("\nGraph Representation (Adjacency List with Weights):")
+    for node, adj in graph.items():
+        print(f"{node}: {adj}")
+    
+    print("\nHeuristic Values:")
+    for node, heuristic in heuristics.items():
+        print(f"{node}: {heuristic}")
+    
+    # Perform Best First Search starting from a given node
+    start_node = input("\nEnter the starting node for Best First Search: ")
+    print(f"\nBest First Search Traversal starting from node '{start_node}':")
+    best_first_search(graph, heuristics, start_node)
+
+if __name__ == "__main__":
+    main()
+
+
+
+------------------------------------INPUT------------------------
+Enter the number of nodes in the graph: 5
+Enter the name of node 1: A
+Enter the adjacent nodes and weights for A (format: node:weight, node:weight): B:1, C:4
+Enter the name of node 2: B
+Enter the adjacent nodes and weights for B (format: node:weight, node:weight): D:2
+Enter the name of node 3: C
+Enter the adjacent nodes and weights for C (format: node:weight, node:weight): D:3
+Enter the name of node 4: D
+Enter the adjacent nodes and weights for D (format: node:weight, node:weight): E:1
+Enter the name of node 5: E
+Enter the adjacent nodes and weights for E (format: node:weight, node:weight): 
+Enter the heuristic value for node A: 2.0
+Enter the heuristic value for node B: 1.0
+Enter the heuristic value for node C: 3.0
+Enter the heuristic value for node D: 4.0
+Enter the heuristic value for node E: 0.0
