@@ -125,3 +125,57 @@ for word in filtered_tokens:
 
 print("\nTokens after Basic Spelling Check:\n", corrected_tokens)
 
+
+------------------------------spelling check---------------
+# Import libraries
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.corpus import words
+from textblob import TextBlob  # Import TextBlob for spell correction
+
+# Make sure you have downloaded these once:
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('words')
+
+# Step 1: Read the text file
+file_name = 'input_text.txt'  # Examiner will provide this file
+
+with open(file_name, 'r') as file:
+    text = file.read()
+
+print("Original Text:\n", text)
+
+# Step 2: Text cleaning (remove punctuation, numbers, special characters, extra whitespaces)
+cleaned_text = re.sub(r'[^a-zA-Z\s]', '', text)  # Keep only letters and spaces
+cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()  # Remove extra spaces
+
+print("\nCleaned Text:\n", cleaned_text)
+
+# Step 3: Convert text to lowercase
+lower_text = cleaned_text.lower()
+
+print("\nLowercase Text:\n", lower_text)
+
+# Step 4: Tokenization using NLTK
+tokens = word_tokenize(lower_text)
+
+print("\nTokens:\n", tokens)
+
+# Step 5: Remove Stopwords using NLTK
+nltk_stopwords = set(stopwords.words('english'))
+filtered_tokens = [word for word in tokens if word not in nltk_stopwords]
+
+print("\nTokens after Stopword Removal:\n", filtered_tokens)
+
+# Step 6: Spelling Correction using TextBlob
+corrected_tokens = []
+for word in filtered_tokens:
+    blob = TextBlob(word)  # Create a TextBlob object for each word
+    corrected_tokens.append(str(blob.correct()))  # Correct the word and append it
+
+print("\nTokens after Spelling Correction using TextBlob:\n", corrected_tokens)
+
+
