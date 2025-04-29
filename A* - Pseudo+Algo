@@ -1,0 +1,58 @@
+
+
+f(n) = g(n) + h(n)
+- `g(n)` = cost from start node to current node  
+- `h(n)` = estimated cost from current node to goal (heuristic)
+
+🔹 Simple A* Algorithm (Steps)
+
+1. Initialize the **open list** with the start node.
+2. Initialize the **closed list** as empty.
+3. Loop until the open list is empty:
+   - a. Select the node with the lowest `f(n)` from the open list.
+   - b. If this node is the goal, reconstruct and return the path.
+   - c. Move the node to the closed list.
+   - d. For each neighbor of the current node:
+     - i. Skip it if it's in the closed list.
+     - ii. Calculate `g`, `h`, and `f`.
+     - iii. If the neighbor is not in the open list, add it.
+     - iv. If it’s already in the open list with a higher `g`, update it.
+
+---------------------------------------------------------------------------------------------------------------
+
+🔹 A* Algorithm Pseudocode
+
+
+function A_Star(start, goal):
+    open_set := priority queue containing start
+    came_from := empty map
+
+    g_score[start] := 0
+    f_score[start] := heuristic(start, goal)
+
+    while open_set is not empty:
+        current := node in open_set with lowest f_score
+
+        if current == goal:
+            return reconstruct_path(came_from, current)
+
+        remove current from open_set
+
+        for each neighbor of current:
+            tentative_g_score := g_score[current] + dist(current, neighbor)
+
+            if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
+                came_from[neighbor] := current
+                g_score[neighbor] := tentative_g_score
+                f_score[neighbor] := g_score[neighbor] + heuristic(neighbor, goal)
+                if neighbor not in open_set:
+                    add neighbor to open_set
+
+    return failure
+
+function reconstruct_path(came_from, current):
+    path := [current]
+    while current in came_from:
+        current := came_from[current]
+        prepend current to path
+    return path
