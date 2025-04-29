@@ -1,17 +1,17 @@
 import pandas as pd
 import heapq
 
-# 📌 1. Read Graph from CSV
+
 edges_file = 'edges.csv'  # Directed weighted edges
 heuristics_file = 'heuristics.csv'  # Heuristic values
 
-edges = pd.read_csv(edges_file, header=None)
+edges = pd.read_csv(edges_file)
 edges.columns = ['Node1', 'Node2', 'Weight']
 
-heuristics = pd.read_csv(heuristics_file, header=None)
+heuristics = pd.read_csv(heuristics_file)
 heuristics.columns = ['Node', 'Heuristic']
 
-# 📌 2. Build Graph (Adjacency List)
+
 graph = {}
 
 for idx, row in edges.iterrows():
@@ -19,13 +19,13 @@ for idx, row in edges.iterrows():
         graph[row['Node1']] = []
     graph[row['Node1']].append((row['Node2'], row['Weight']))
 
-# 📌 3. Build Heuristic Dictionary
+
 heuristic_values = dict(zip(heuristics['Node'], heuristics['Heuristic']))
 
 print("Graph:", graph)
 print("\nHeuristic Values:", heuristic_values)
 
-# 📌 4. A* Algorithm Implementation
+
 def a_star(graph, start, goal, heuristics):
     # Priority Queue (min-heap) to store nodes along with their f(n) value
     open_list = []
@@ -67,9 +67,9 @@ def a_star(graph, start, goal, heuristics):
                 heapq.heappush(open_list, (f_n, neighbor))
                 parents[neighbor] = current_node
     
-    return None  # Return None if no path is found
+    return None 
 
-# 📌 5. Run A* Algorithm from 'A' to 'F'
+
 start_node = 'A'
 goal_node = 'F'
 
@@ -92,7 +92,7 @@ C,D,3
 D,E,4
 E,F,2
 
--------------------heurestics.csv-------------
+-------------------heuristics.csv-------------
 A,7
 B,6
 C,2
