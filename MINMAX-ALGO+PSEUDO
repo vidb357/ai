@@ -1,0 +1,72 @@
+ALGO
+
+
+1. Check if the current board state is a **terminal state** (win, lose, or draw).
+   - If yes, return the **evaluation score**:
+     - Win → +10
+     - Loss → -10
+     - Draw → 0
+
+2. If it's the **maximizing player's turn** (e.g., 'X'):
+   - Initialize `bestScore = -infinity`.
+   - For each empty cell:
+     - Make a temporary move for 'X'.
+     - Call `minimax` recursively for the new board with **isMaximizing = false**.
+     - Undo the move.
+     - Update `bestScore` with the maximum of current `bestScore` and returned score.
+   - Return `bestScore`.
+
+3. If it's the **minimizing player's turn** (e.g., 'O'):
+   - Initialize `bestScore = +infinity`.
+   - For each empty cell:
+     - Make a temporary move for 'O'.
+     - Call `minimax` recursively for the new board with **isMaximizing = true**.
+     - Undo the move.
+     - Update `bestScore` with the minimum of current `bestScore` and returned score.
+   - Return `bestScore`.
+
+4. In the main function (`findBestMove`):
+   - For each empty cell:
+     - Make a temporary move for 'X'.
+     - Call `minimax` for the move.
+     - Undo the move.
+     - If the returned score is better than the current best, update best move.
+
+------------------------------------------------------------------------------------------------------------
+
+PSEUDOCODE
+
+function minimax(board, depth, isMaximizing):
+    if terminal state (win, lose, draw):
+        return evaluation score
+
+    if isMaximizing:
+        bestScore := -infinity
+        for each empty cell in board:
+            make move for maximizing player (X)
+            score := minimax(board, depth + 1, false)
+            undo move
+            bestScore := max(bestScore, score)
+        return bestScore
+
+    else:
+        bestScore := +infinity
+        for each empty cell in board:
+            make move for minimizing player (O)
+            score := minimax(board, depth + 1, true)
+            undo move
+            bestScore := min(bestScore, score)
+        return bestScore
+
+function findBestMove(board):
+    bestMove := null
+    bestScore := -infinity
+    for each empty cell in board:
+        make move for maximizing player (X)
+        score := minimax(board, 0, false)
+        undo move
+        if score > bestScore:
+            bestScore := score
+            bestMove := current move
+    return bestMove
+
